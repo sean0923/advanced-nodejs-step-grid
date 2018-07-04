@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
-const requireLogin = require('../middlewares/requireLogin');
 
-const util = require('util');
+const requireLogin = require('../middlewares/requireLogin');
+const { clearCache } = require('../services/cache');
 
 const Blog = mongoose.model('Blog');
 
@@ -36,5 +36,7 @@ module.exports = app => {
     } catch (err) {
       res.send(400, err);
     }
+
+    clearCache(req.user.id);
   });
 };

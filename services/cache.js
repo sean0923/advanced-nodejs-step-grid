@@ -27,7 +27,6 @@ mongoose.Query.prototype.exec = async function() {
 
   // see if the key exist in cache
   const cachedDataStr = await client.hget(this.hashKey, key);
-  console.log('cachedDataStr: ', cachedDataStr);
 
   // if cache data exist then return parsed data
   if (cachedDataStr) {
@@ -48,17 +47,11 @@ mongoose.Query.prototype.exec = async function() {
   }
 };
 
-// const redis = require('redis');
-// const redisUri = 'redis://127.00.1:6379';
-// const client = redis.createClient(redisUri);
-// client.get = util.promisify(client.get);
-// // Do we have any cached data in redis related to this query
-// const cachedBlogs = await client.get(req.user.id);
-// // if yes, then respond to the request right away from redis
-// if (cachedBlogs !== undefined && cachedBlogs !== null) {
-//   console.log('SEND FROM REDIS');
-//   return res.send(JSON.parse(cachedBlogs));
-// }
-// // if no, store blogs to redis
-// client.set(req.user.id, JSON.stringify(blogs));
-// console.log('SEND FROM MONGODB');
+module.exports = {
+  clearCache: hashKey => {
+    console.log('------------------');
+    console.log('hashKey: ', hashKey);
+    console.log('------------------');
+    client.del(JSON.stringify(hashKey));
+  },
+};
