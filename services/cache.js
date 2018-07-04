@@ -1,17 +1,37 @@
 const mongoose = require('mongoose');
+const redis = require('redis');
+const util = require('util');
+
+const redisUri = 'redis://127.00.1:6379';
+const client = redis.createClient(redisUri);
+// promisify client.get
+client.get = util.promisify(client.get);
 
 // get reference to original mongoose exec func
 const exec = mongoose.Query.prototype.exec;
 
 // Have to use function() instead of =>
-mongoose.Query.prototype.exec = function() {
-  console.log('ABOUT TO RUN A QUERY');
-
+mongoose.Query.prototype.exec = async function() {
   const key = JSON.stringify({ ...this.getQuery(), collection: mongoose.Collection.name });
-  console.log('key: ', key);
 
+  // see if the key exist in cache
+  const cachedDataStr = await client.get(key);
 
-  return exec.apply(this, arguments);
+  // if it does return that
+  if (cachedDataStr) {
+    console.log('cachedDataStr: ', cachedDataStr);
+    const parsedCachedData = JSON.parse(cachedDataStr);
+
+    Array.isArray(parsedCachedData)
+      ? parsedCachedData.map(obj => this.model(obj))
+      : new this.model(parsedCachedData);
+  }
+
+  // else store it to redis then return data from mongo
+  const dataFromMongoDB = await exec.apply(this, arguments);
+  client.set(key, JSON.stringify(dataFromMongoDB));
+
+  return dataFromMongoDB;
 };
 
 // const redis = require('redis');
