@@ -1,14 +1,21 @@
 import puppeteer from 'puppeteer';
 
-it('1 + 2 = 3', () => {
-  expect(1 + 2).toEqual(3);
+let browser, page;
+
+beforeEach(async () => {
+  browser = await puppeteer.launch({
+    headless: false,
+  });
+  page = await browser.newPage();
+  await page.goto('localhost:3000');
+});
+
+afterEach(async () => {
+  browser.close();
 });
 
 it('puppeteer opens browser and page', async () => {
-  const browser = await puppeteer.launch({
-    headless: false
-  })
+  const text = await page.$eval('a.brand-logo', el => el.innerHTML);
 
-  const page = await browser.newPage();
-})
-
+  expect(text).toEqual('Blogster');
+});
