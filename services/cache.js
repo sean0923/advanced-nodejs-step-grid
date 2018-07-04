@@ -10,8 +10,17 @@ client.get = util.promisify(client.get);
 // get reference to original mongoose exec func
 const exec = mongoose.Query.prototype.exec;
 
+mongoose.Query.prototype.cache = function() {
+  this.useCache = true;
+  return this;
+};
+
 // Have to use function() instead of =>
 mongoose.Query.prototype.exec = async function() {
+  if (!this.useCache) {
+    return exec.apply(this, arguments);
+  }
+
   const key = JSON.stringify({ ...this.getQuery(), collection: mongoose.Collection.name });
 
   // see if the key exist in cache
@@ -27,11 +36,12 @@ mongoose.Query.prototype.exec = async function() {
       : new this.model(parsedCachedData);
   }
 
+  // else {
   // else store it to redis then return data from mongo
   const dataFromMongoDB = await exec.apply(this, arguments);
   client.set(key, JSON.stringify(dataFromMongoDB));
-
   return dataFromMongoDB;
+  // }
 };
 
 // const redis = require('redis');
