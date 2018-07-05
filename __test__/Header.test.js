@@ -19,3 +19,9 @@ it('puppeteer opens browser and page', async () => {
 
   expect(text).toEqual('Blogster');
 });
+
+it('click login redirect user to accouts.google page', async () => {
+  await page.click('.right a');
+  const URL = await page.url();
+  expect(URL).toContain('accounts.google.com');
+});
