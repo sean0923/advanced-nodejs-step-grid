@@ -13,12 +13,10 @@ beforeEach(async () => {
   });
   page = await browser.newPage();
   await page.goto(LOCALHOST_URL);
-
-  
 });
 
 afterEach(async () => {
-  // browser.close();
+  browser.close();
 });
 
 it('puppeteer opens browser and page', async () => {
@@ -33,7 +31,7 @@ it('click login redirect user to accouts.google page', async () => {
   expect(URL).toContain('accounts.google.com');
 });
 
-it.only('insert session and session sig to header', async () => {
+it('Set cookie and refresh render "Logout"', async () => {
   const sessionObj = {
     passport: {
       user: keys.mLabUserId,
@@ -46,12 +44,19 @@ it.only('insert session and session sig to header', async () => {
 
   const keygrip = new Keygrip([keys.cookieKey]);
   const sessionSig = keygrip.sign('session=' + sessionStr);
-  
+
   expect(sessionSig).toEqual(keys.sessionSig);
 
   await page.setCookie({ name: 'session', value: sessionStr });
-  await page.setCookie({ name: 'session.sig', value: sessionSig})
+  await page.setCookie({ name: 'session.sig', value: sessionSig });
 
   // Refresh to get the effect of setting cookie
-  page.goto(LOCALHOST_URL); 
+  await page.goto(LOCALHOST_URL);
+
+  // Guess I need to wait for element to be rendered
+  await page.waitFor('a[href="/auth/logout"]');
+
+  const text = await page.$eval('a[href="/auth/logout"]', el => el.innerHTML);
+
+  expect(text).toEqual('Logout');
 });
