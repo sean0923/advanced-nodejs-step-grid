@@ -5,16 +5,20 @@ import Keygrip from 'keygrip';
 
 let browser, page;
 
+const LOCALHOST_URL = 'localhost:3000';
+
 beforeEach(async () => {
   browser = await puppeteer.launch({
     headless: false,
   });
   page = await browser.newPage();
-  await page.goto('localhost:3000');
+  await page.goto(LOCALHOST_URL);
+
+  
 });
 
 afterEach(async () => {
-  browser.close();
+  // browser.close();
 });
 
 it('puppeteer opens browser and page', async () => {
@@ -29,7 +33,7 @@ it('click login redirect user to accouts.google page', async () => {
   expect(URL).toContain('accounts.google.com');
 });
 
-it('insert session and session sig to header', async () => {
+it.only('insert session and session sig to header', async () => {
   const sessionObj = {
     passport: {
       user: keys.mLabUserId,
@@ -42,6 +46,12 @@ it('insert session and session sig to header', async () => {
 
   const keygrip = new Keygrip([keys.cookieKey]);
   const sessionSig = keygrip.sign('session=' + sessionStr);
-
+  
   expect(sessionSig).toEqual(keys.sessionSig);
+
+  await page.setCookie({ name: 'session', value: sessionStr });
+  await page.setCookie({ name: 'session.sig', value: sessionSig})
+
+  // Refresh to get the effect of setting cookie
+  page.goto(LOCALHOST_URL); 
 });
