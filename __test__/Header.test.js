@@ -53,7 +53,7 @@ it('Set cookie and refresh render "Logout"', async () => {
   // Refresh to get the effect of setting cookie
   await page.goto(LOCALHOST_URL);
 
-  // Guess I need to wait for element to be rendered
+  // Need for element to be render
   await page.waitFor('a[href="/auth/logout"]');
 
   const text = await page.$eval('a[href="/auth/logout"]', el => el.innerHTML);
