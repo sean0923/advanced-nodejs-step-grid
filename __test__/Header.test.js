@@ -2,6 +2,8 @@ import puppeteer from 'puppeteer';
 import * as keys from '../config/keys';
 import { Buffer } from 'buffer';
 import Keygrip from 'keygrip';
+import userFactory from './factories/userFactory';
+import sessionFactory from './factories/sessionFactory';
 
 let browser, page;
 
@@ -32,22 +34,10 @@ it('click login redirect user to accouts.google page', async () => {
 });
 
 it('Set cookie and refresh render "Logout"', async () => {
-  const sessionObj = {
-    passport: {
-      user: keys.mLabUserId,
-    },
-  };
+  const user = await userFactory();
+  const { session, sessionSig } = sessionFactory(user);
 
-  const sessionStr = Buffer.from(JSON.stringify(sessionObj)).toString('base64');
-
-  expect(sessionStr).toEqual(keys.session);
-
-  const keygrip = new Keygrip([keys.cookieKey]);
-  const sessionSig = keygrip.sign('session=' + sessionStr);
-
-  expect(sessionSig).toEqual(keys.sessionSig);
-
-  await page.setCookie({ name: 'session', value: sessionStr });
+  await page.setCookie({ name: 'session', value: session });
   await page.setCookie({ name: 'session.sig', value: sessionSig });
 
   // Refresh to get the effect of setting cookie
