@@ -1,24 +1,23 @@
 import puppeteer from 'puppeteer';
-import * as keys from '../config/keys';
-import { Buffer } from 'buffer';
-import Keygrip from 'keygrip';
 import userFactory from './factories/userFactory';
 import sessionFactory from './factories/sessionFactory';
+import CustomPage from './helpers/CustomPage';
 
-let browser, page;
+let page;
 
 const LOCALHOST_URL = 'localhost:3000';
 
 beforeEach(async () => {
-  browser = await puppeteer.launch({
-    headless: false,
-  });
-  page = await browser.newPage();
+  // browser = await puppeteer.launch({
+  // headless: false,
+  // });
+  // page = await browser.newPage();
+  page = await CustomPage.build();
   await page.goto(LOCALHOST_URL);
 });
 
 afterEach(async () => {
-  browser.close();
+  page.close();
 });
 
 it('puppeteer opens browser and page', async () => {
