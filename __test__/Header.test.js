@@ -3,6 +3,7 @@ import userFactory from './factories/userFactory';
 import sessionFactory from './factories/sessionFactory';
 import CustomPage from './helpers/CustomPage';
 
+// let browser;
 let page;
 
 const LOCALHOST_URL = 'localhost:3000';
@@ -17,6 +18,7 @@ beforeEach(async () => {
 });
 
 afterEach(async () => {
+  // browser.close()
   page.close();
 });
 
