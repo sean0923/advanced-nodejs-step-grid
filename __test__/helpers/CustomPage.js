@@ -2,7 +2,6 @@ import puppeteer from 'puppeteer';
 import userFactory from '../factories/userFactory';
 import sessionFactory from '../factories/sessionFactory';
 
-
 const LOCALHOST_URL = 'localhost:3000';
 
 class CustomPage {
@@ -40,6 +39,10 @@ class CustomPage {
     await this.page.goto(LOCALHOST_URL);
     // Need for element to be render
     await this.page.waitFor('a[href="/auth/logout"]');
+  }
+
+  getContentOf(selector) {
+    return this.page.$eval(selector, el => el.innerHTML);
   }
 }
 
