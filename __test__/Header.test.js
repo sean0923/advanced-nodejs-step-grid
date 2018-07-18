@@ -1,6 +1,3 @@
-import puppeteer from 'puppeteer';
-import userFactory from './factories/userFactory';
-import sessionFactory from './factories/sessionFactory';
 import CustomPage from './helpers/CustomPage';
 
 // let browser;
@@ -35,17 +32,7 @@ it('click login redirect user to accouts.google page', async () => {
 });
 
 it('Set cookie and refresh render "Logout"', async () => {
-  const user = await userFactory();
-  const { session, sessionSig } = sessionFactory(user);
-
-  await page.setCookie({ name: 'session', value: session });
-  await page.setCookie({ name: 'session.sig', value: sessionSig });
-
-  // Refresh to get the effect of setting cookie
-  await page.goto(LOCALHOST_URL);
-
-  // Need for element to be render
-  await page.waitFor('a[href="/auth/logout"]');
+  await page.login();
 
   const text = await page.$eval('a[href="/auth/logout"]', el => el.innerHTML);
 

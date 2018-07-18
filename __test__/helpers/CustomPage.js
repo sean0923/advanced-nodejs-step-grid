@@ -1,4 +1,9 @@
 import puppeteer from 'puppeteer';
+import userFactory from '../factories/userFactory';
+import sessionFactory from '../factories/sessionFactory';
+
+
+const LOCALHOST_URL = 'localhost:3000';
 
 class CustomPage {
   static async build() {
@@ -24,6 +29,17 @@ class CustomPage {
 
   close() {
     this.browser.close();
+  }
+
+  async login() {
+    const user = await userFactory();
+    const { session, sessionSig } = sessionFactory(user);
+    await this.page.setCookie({ name: 'session', value: session });
+    await this.page.setCookie({ name: 'session.sig', value: sessionSig });
+    // Refresh to get the effect of setting cookie
+    await this.page.goto(LOCALHOST_URL);
+    // Need for element to be render
+    await this.page.waitFor('a[href="/auth/logout"]');
   }
 }
 
