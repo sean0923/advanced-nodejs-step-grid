@@ -1,6 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import styled from 'styled-components';
+
+const Wrapper = styled.div`
+  background-color: green;
+  color: #fff;
+`;
 
 class Header extends Component {
   renderContent() {
@@ -20,7 +26,7 @@ class Header extends Component {
           </li>,
           <li key="2">
             <a href={'/auth/logout'}>Logout</a>
-          </li>
+          </li>,
         ];
     }
   }

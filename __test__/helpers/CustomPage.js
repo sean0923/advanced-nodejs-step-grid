@@ -1,6 +1,7 @@
 import puppeteer from 'puppeteer';
 import userFactory from '../factories/userFactory';
 import sessionFactory from '../factories/sessionFactory';
+import * as constants from '../../constants/constants';
 
 const LOCALHOST_URL = 'localhost:3000';
 
@@ -36,7 +37,7 @@ class CustomPage {
     await this.page.setCookie({ name: 'session', value: session });
     await this.page.setCookie({ name: 'session.sig', value: sessionSig });
     // Refresh to get the effect of setting cookie
-    await this.page.goto(LOCALHOST_URL);
+    await this.page.goto(constants.LOCALHOST_URL_BLOG);
     // Need for element to be render
     await this.page.waitFor('a[href="/auth/logout"]');
   }
