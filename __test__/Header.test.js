@@ -35,7 +35,7 @@ it('Set cookie and refresh render "Logout"', async () => {
   await page.login();
 
   // const text = await page.$eval('a[href="/auth/logout"]', el => el.innerHTML);
-  const text = await page.getContentOf('a[href="/auth/logout"]');
+  const text = await page.getContentOf('[data-test="a-tag-logout"]');
 
   expect(text).toEqual('Logout');
 });

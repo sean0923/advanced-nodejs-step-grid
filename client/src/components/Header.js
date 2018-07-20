@@ -25,7 +25,7 @@ class Header extends Component {
             <Link to="/blogs">My Blogs</Link>
           </li>,
           <li key="2">
-            <a href={'/auth/logout'}>Logout</a>
+            <a data-test="a-tag-logout" href={'/auth/logout'}>Logout</a>
           </li>,
         ];
     }
