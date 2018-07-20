@@ -18,8 +18,16 @@ describe('When logged in then create-blog-post-btn is clicked', async () => {
     await page.click('a.btn-floating');
   });
 
-  test.only('Can see blog create form', async () => {
+  test('Can see blog create form', async () => {
     const text = await page.getContentOf('label');
     expect(text).toEqual('Blog Title');
+  });
+
+  describe('Then user click next btn with invalid input', async () => {
+    test('Show error messages', async () => {
+      await page.click('[data-test="form-submit-button"]');
+      const errMssg = await page.getContentOf('.red-text');
+      expect(errMssg).toEqual('You must provide a value');
+    });
   });
 });
