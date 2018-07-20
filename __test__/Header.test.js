@@ -6,16 +6,11 @@ let page;
 const LOCALHOST_URL = 'localhost:3000';
 
 beforeEach(async () => {
-  // browser = await puppeteer.launch({
-  // headless: false,
-  // });
-  // page = await browser.newPage();
   page = await CustomPage.build();
   await page.goto(LOCALHOST_URL);
 });
 
 afterEach(async () => {
-  // browser.close()
   page.close();
 });
 
