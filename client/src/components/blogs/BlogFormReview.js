@@ -14,7 +14,7 @@ class BlogFormReview extends Component {
       return (
         <div key={name}>
           <label>{label}</label>
-          <div>{formValues[name]}</div>
+          <div data-test={label}>{formValues[name]}</div>
         </div>
       );
     });
@@ -25,13 +25,10 @@ class BlogFormReview extends Component {
 
     return (
       <div>
-        <button
-          className="yellow darken-3 white-text btn-flat"
-          onClick={onCancel}
-        >
+        <button className="yellow darken-3 white-text btn-flat" onClick={onCancel}>
           Back
         </button>
-        <button className="green btn-flat right white-text">
+        <button data-test="save-blog-button" className="green btn-flat right white-text">
           Save Blog
           <i className="material-icons right">email</i>
         </button>

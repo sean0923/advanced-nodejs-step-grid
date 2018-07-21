@@ -1,4 +1,5 @@
 import CustomPage from './helpers/CustomPage';
+import faker from 'faker';
 import * as constatns from '../constants/constants';
 
 let page;
@@ -25,9 +26,28 @@ describe('When logged in then create-blog-post-btn is clicked', async () => {
 
   describe('Then user click next btn with invalid input', async () => {
     test('Show error messages', async () => {
-      await page.click('[data-test="form-submit-button"]');
+      await page.click('[data-test="form-next-button"]');
       const errMssg = await page.getContentOf('.red-text');
       expect(errMssg).toEqual('You must provide a value');
+    });
+  });
+
+  describe('User click next btn with valid input', async () => {
+    test('Render card with correct title after save blog btn is clicked', async () => {
+      const userTitleInput = 'some title';
+
+      await page.type('.title input', userTitleInput);
+      await page.type('.content input', 'some content');
+      await page.click('[data-test="form-next-button"]');
+
+      await page.waitFor('button.green');
+
+      // click confirm btn
+      page.click('.green');
+
+      await page.waitFor('.card-content .card-title');
+      const text = await page.getContentOf('.card-content .card-title');
+      expect(text).toEqual(userTitleInput);
     });
   });
 });
