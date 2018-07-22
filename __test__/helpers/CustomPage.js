@@ -76,6 +76,14 @@ class CustomPage {
 
     return this.page.evaluate(postReq, path, body);
   }
+
+  execHttpReqs(actions) {
+    return Promise.all(
+      actions.map(({ path, method, body }) => {
+        return this[method](path, body);
+      })
+    );
+  }
 }
 
 export default CustomPage;

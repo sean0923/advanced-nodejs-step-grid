@@ -58,13 +58,23 @@ describe('When user is not loggedin', async () => {
     expect(text).toEqual('Login With Google');
   });
 
-  test('fetch req return error', async () => {
-    const result = await page.post('api/blogs', { title: 'My Title aa', content: 'My Content' });
-    expect(result).toEqual({ error: 'You must log in!' });
-  });
+  const httpReqs = [
+    {
+      path: 'api/blogs',
+      method: 'get',
+    },
+    {
+      path: 'api/blogs',
+      method: 'post',
+      body: { title: 'My Title aa', content: 'My Content' },
+    },
+  ];
 
-  test('fetch req return error', async () => {
-    const result = await page.get('api/blogs');
-    expect(result).toEqual({ error: 'You must log in!' });
+  test('return errors when http reqs invoked without login', async () => {
+    const targetResult = { error: 'You must log in!' };
+    const results = await page.execHttpReqs(httpReqs);
+    results.forEach(result => {
+      expect(result).toEqual(targetResult);
+    });
   });
 });
