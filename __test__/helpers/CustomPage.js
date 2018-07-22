@@ -3,8 +3,6 @@ import userFactory from '../factories/userFactory';
 import sessionFactory from '../factories/sessionFactory';
 import * as constants from '../../constants/constants';
 
-const LOCALHOST_URL = 'localhost:3000';
-
 class CustomPage {
   static async build() {
     const browser = await puppeteer.launch({
@@ -44,6 +42,39 @@ class CustomPage {
 
   getContentOf(selector) {
     return this.page.$eval(selector, el => el.innerHTML);
+  }
+
+  get(path) {
+    const getReq = _path => {
+      return fetch(_path, {
+        method: 'GET',
+        credentials: 'same-origin',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }).then(data => {
+        return data.json();
+      });
+    };
+
+    return this.page.evaluate(getReq, path);
+  }
+
+  post(path, body) {
+    const postReq = (_path, _body) => {
+      return fetch(_path, {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(_body),
+      }).then(data => {
+        return data.json();
+      });
+    };
+
+    return this.page.evaluate(postReq, path, body);
   }
 }
 
