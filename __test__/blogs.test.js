@@ -59,7 +59,7 @@ describe('When user is not loggedin', async () => {
   });
 
   test('fetch req return error', async () => {
-    const fetchBlogs = () => {
+    const postBlogs = () => {
       return fetch('api/blogs', {
         method: 'POST',
         credentials: 'same-origin',
@@ -72,7 +72,25 @@ describe('When user is not loggedin', async () => {
       });
     };
 
-    const result = await page.evaluate(fetchBlogs);
+    const result = await page.evaluate(postBlogs);
+
+    expect(result).toEqual({ error: 'You must log in!' });
+  });
+
+  test('fetch req return error', async () => {
+    const getBlogs = () => {
+      return fetch('api/blogs', {
+        method: 'GET',
+        credentials: 'same-origin',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }).then(data => {
+        return data.json();
+      });
+    };
+
+    const result = await page.evaluate(getBlogs);
 
     expect(result).toEqual({ error: 'You must log in!' });
   });
