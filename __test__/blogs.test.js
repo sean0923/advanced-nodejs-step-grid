@@ -51,3 +51,29 @@ describe('When logged in then create-blog-post-btn is clicked', async () => {
     });
   });
 });
+
+describe('When user is not loggedin', async () => {
+  test('Show Login with Google anchor tag', async () => {
+    const text = await page.getContentOf('a[href="/auth/google"');
+    expect(text).toEqual('Login With Google');
+  });
+
+  test('fetch req return error', async () => {
+    const fetchBlogs = () => {
+      return fetch('api/blogs', {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ title: 'My Title aa', content: 'My Content' }),
+      }).then(data => {
+        return data.json();
+      });
+    };
+
+    const result = await page.evaluate(fetchBlogs);
+
+    expect(result).toEqual({ error: 'You must log in!' });
+  });
+});
