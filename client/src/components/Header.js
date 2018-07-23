@@ -3,11 +3,6 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
-const Wrapper = styled.div`
-  background-color: green;
-  color: #fff;
-`;
-
 class Header extends Component {
   renderContent() {
     switch (this.props.auth) {
@@ -25,7 +20,9 @@ class Header extends Component {
             <Link to="/blogs">My Blogs</Link>
           </li>,
           <li key="2">
-            <a data-test="a-tag-logout" href={'/auth/logout'}>Logout</a>
+            <a data-test="a-tag-logout" href={'/auth/logout'}>
+              Logout
+            </a>
           </li>,
         ];
     }
