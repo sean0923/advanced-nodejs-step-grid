@@ -3,5 +3,6 @@ nohup.out
 .DS_Store
 
 dev.js
+ci.js
 
 temp.js

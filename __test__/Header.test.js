@@ -1,13 +1,11 @@
 import CustomPage from './helpers/CustomPage';
-
+import * as constants from '../constants/constants';
 // let browser;
 let page;
 
-const LOCALHOST_URL = 'localhost:3000';
-
 beforeEach(async () => {
   page = await CustomPage.build();
-  await page.goto(LOCALHOST_URL);
+  await page.goto(constants.LOCALHOST_URL);
 });
 
 afterEach(async () => {
