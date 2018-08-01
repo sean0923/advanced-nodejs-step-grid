@@ -6,7 +6,7 @@ import * as constants from '../../constants/constants';
 class CustomPage {
   static async build() {
     const browser = await puppeteer.launch({
-      headless: false,
+      headless: true,
       args: ['--no-sandbox'],
     });
 
