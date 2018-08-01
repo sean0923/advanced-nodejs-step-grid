@@ -18,7 +18,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "aws-sdk": "^2.188.0",
+    "aws-sdk": "^2.284.1",
     "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
     "body-parser": "^1.17.2",
     "concurrently": "^3.5.0",
