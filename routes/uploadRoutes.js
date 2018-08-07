@@ -17,7 +17,7 @@ module.exports = app => {
       'putObject',
       {
         Bucket: 's3-testing-1234',
-        ContentType: 'jpeg',
+        ContentType: 'image/jpeg',
         Key: key,
       },
       (err, url) => res.send({ key, url })
